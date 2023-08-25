@@ -67,10 +67,17 @@ ecm_setup_version(${RELEASE_SERVICE_VERSION} VARIABLE_PREFIX KONSOLEPRIVATE
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED
     Core
     DBus
-    Multimedia
     PrintSupport
     Widgets
 )
+
+option(WITHOUT_MULTIMEDIA "Build without multimedia support (audio files)" OFF)
+if (NOT WITHOUT_MULTIMEDIA)
+	find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED
+	    Multimedia
+	)
+	set(HAVE_MULTIMEDIA 1)
+endif()
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED
     Bookmarks

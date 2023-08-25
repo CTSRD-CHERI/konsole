@@ -11,7 +11,9 @@
 // Qt
 #include <QHash>
 #include <QMap>
+#if HAVE_MULTIMEDIA
 #include <QMediaPlayer>
+#endif
 #include <QPair>
 #include <QVector>
 
@@ -98,7 +100,9 @@ private Q_SLOTS:
     // pair in _pendingSessionAttributesUpdates.
     // Used to buffer multiple attribute updates in the current session
     void updateSessionAttributes();
+#if HAVE_MULTIMEDIA
     void deletePlayer(QMediaPlayer::MediaStatus);
+#endif
 
 private:
     unsigned int applyCharset(uint c);
@@ -313,7 +317,9 @@ private:
     // For kitty graphics protocol - image cache
     int getFreeGraphicsImageId();
 
+#if HAVE_MULTIMEDIA
     QMediaPlayer *player;
+#endif
 };
 
 }

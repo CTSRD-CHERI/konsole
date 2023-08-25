@@ -69,7 +69,9 @@ Vt102Emulation::Vt102Emulation()
     , _pendingSessionAttributesUpdates(QHash<int, QString>())
     , _sessionAttributesUpdateTimer(new QTimer(this))
     , _reportFocusEvents(false)
+#if HAVE_MULTIMEDIA
     , player(nullptr)
+#endif
 {
     _sessionAttributesUpdateTimer->setSingleShot(true);
     QObject::connect(_sessionAttributesUpdateTimer, &QTimer::timeout, this, &Konsole::Vt102Emulation::updateSessionAttributes);
@@ -1221,7 +1223,9 @@ void Vt102Emulation::processSessionAttributeRequest(const int tokenSize, const u
 
     if (attribute == Image) {
         bool inlineImage = false;
+#if HAVE_MULTIMEDIA
         bool inlineMedia = false;
+#endif
         if (value.startsWith(QLatin1String("ReportCellSize"))) {
             iTermReportCellSize();
             return;
@@ -1243,9 +1247,11 @@ void Vt102Emulation::processSessionAttributeRequest(const int tokenSize, const u
                 if (var == QLatin1String("inline")) {
                     inlineImage = val == QLatin1String("1");
                 }
+#if HAVE_MULTIMEDIA
                 if (var == QLatin1String("inlineMedia")) {
                     inlineMedia = val == QLatin1String("1");
                 }
+#endif
                 if (var == QLatin1String("preserveAspectRatio")) {
                     keepAspect = val == QLatin1String("0");
                 }
@@ -1276,6 +1282,7 @@ void Vt102Emulation::processSessionAttributeRequest(const int tokenSize, const u
                 }
             }
         }
+#if HAVE_MULTIMEDIA
         if (inlineMedia) {
             if (player == nullptr) {
                 player = new QMediaPlayer(this);
@@ -1295,6 +1302,7 @@ void Vt102Emulation::processSessionAttributeRequest(const int tokenSize, const u
             player->play();
             return;
         }
+#endif
         if (!inlineImage) {
             return;
         }
@@ -1320,6 +1328,7 @@ void Vt102Emulation::processSessionAttributeRequest(const int tokenSize, const u
     _sessionAttributesUpdateTimer->start(20);
 }
 
+#if HAVE_MULTIMEDIA
 void Vt102Emulation::deletePlayer(QMediaPlayer::MediaStatus mediaStatus)
 {
     if (mediaStatus == QMediaPlayer::EndOfMedia || mediaStatus == QMediaPlayer::InvalidMedia) {
@@ -1333,6 +1342,7 @@ void Vt102Emulation::deletePlayer(QMediaPlayer::MediaStatus mediaStatus)
         player = nullptr;
     }
 }
+#endif
 
 void Vt102Emulation::updateSessionAttributes()
 {

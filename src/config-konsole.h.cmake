@@ -3,6 +3,8 @@
 /* Defined if on DragonFly BSD */
 #cmakedefine01 HAVE_OS_DRAGONFLYBSD
 
+#cmakedefine01 HAVE_MULTIMEDIA
+
 #cmakedefine01 HAVE_X11
 
 /* If defined, remove public access to dbus sendInput/runCommand */

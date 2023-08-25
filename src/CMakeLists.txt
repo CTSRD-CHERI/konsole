@@ -62,7 +62,6 @@ qt_add_dbus_adaptor(
 
 set(konsole_LIBS
     KF5::XmlGui
-    Qt::Multimedia
     Qt::PrintSupport
     Qt::Xml
     KF5::Notifications
@@ -76,6 +75,12 @@ set(konsole_LIBS
     KF5::DBusAddons
     KF5::NewStuff
 )
+
+if (NOT WITHOUT_MULTIMEDIA)
+    list(APPEND konsole_LIBS
+        Qt::Multimedia
+    )
+endif()
 
 if (NOT WIN32)
     list(APPEND konsole_LIBS
